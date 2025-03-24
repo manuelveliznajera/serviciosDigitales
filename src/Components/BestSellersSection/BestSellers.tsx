@@ -1,5 +1,4 @@
 import React from 'react';
-import ProductCard from '../ProductCard/ProductCard';
 import { Product } from '../../Interfaces/Product';
 import CardGrid from '../ProductCard/CardGrid';
 

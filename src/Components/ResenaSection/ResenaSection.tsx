@@ -1,6 +1,4 @@
-import React from 'react';
 import { FaQuoteLeft } from 'react-icons/fa';
-import SuscribirseSection from '../SuscribirseSection/SuscribirseSection';
 
 const reviews = [
   {

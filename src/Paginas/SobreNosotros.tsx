@@ -1,4 +1,3 @@
-import React from 'react'
 import FooterSection from '../Components/FooterSection/FooterSection'
 
 export const SobreNosotros = () => {
