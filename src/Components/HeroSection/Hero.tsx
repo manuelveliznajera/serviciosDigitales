@@ -23,7 +23,7 @@ const Hero: React.FC = () => {
       <div className="flex w-full mt-8 space-x-4 overflow-x-auto relative z-10">
       {
         images.map((image, index) => (
-          <img key={index} src={image.urlImage} alt={image.altName} className="h-60 w-3/4" />
+          <img key={index} src={image.urlImage} alt={image.altName} className="h-60 w-full bg-white rounded-2xl" />
         ))      
       }
       </div>

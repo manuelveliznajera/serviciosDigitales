@@ -1,9 +1,12 @@
 import React from 'react';
 import { FaWhatsapp, FaEnvelope, FaFacebook, FaInstagram } from 'react-icons/fa';
 
-const FooterSection: React.FC = () => {
+interface FooterSectionProps {
+  className?: string;
+}
+const FooterSection: React.FC<FooterSectionProps>= ({className}) => {
   return (
-    <footer className="bg-gradient-to-b from-blue-500 via-[#012FD3] to-[#0101A7] text-white pt-50 pb-20">
+    <footer className={`bg-gradient-to-b from-blue-500 via-[#012FD3] to-[#0101A7] text-white pb-20 ${className}`}>
       <div className="container mx-auto flex justify-between">
         <div>
           <h3 className="text-lg font-bold mb-2">SERVICIOS DIGITALES</h3>

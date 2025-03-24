@@ -4,11 +4,13 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
 import Navbar from './Components/Navbar/Navbar'
 import { Home } from './Paginas/Home';
+import { Softwares } from './Paginas/Softwares';
+import { SobreNosotros } from './Paginas/SobreNosotros';
+import { ProductoDetalle } from './Paginas/ProductoDetalle';
 
 
-const Softwares = () => <div>Softwares Page</div>;
+
 const DisenoGrafico = () => <div>Diseño Gráfico Page</div>;
-const SobreNosotros = () => <div>Sobre Nosotros Page</div>;
 
 function App() {
 
@@ -20,6 +22,7 @@ function App() {
       <Route path="/softwares" element={<Softwares />} />
       <Route path="/diseno-grafico" element={<DisenoGrafico />} />
       <Route path="/sobre-nosotros" element={<SobreNosotros />} />
+      <Route path="/producto/:id" element={<ProductoDetalle />} />
     </Routes>
   </BrowserRouter >
   )
