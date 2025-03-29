@@ -3,6 +3,7 @@ import SuscribirseSection from '../Components/SuscribirseSection/SuscribirseSect
 import FooterSection from '../Components/FooterSection/FooterSection';
 import { Product } from '../Interfaces/Product';
 import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const products: Product[] = [
     {
@@ -40,19 +41,20 @@ const products: Product[] = [
 ];
 export const ProductoDetalle = () => {
     const { id } = useParams<{ id: string }>();
-    console.log(id);
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [id]);
     const product = products.find((product) => product.id === id);
     if (!product) {
         return <div>Producto no encontrado</div>;
       }
-      console.log(product)
   return (
     
         <>
           <div className="container mx-auto py-16">
             <div className="flex justify-between items-center mb-8">
               <div className="w-1/2">
-                <img src={product.urlImage} alt={product.altName} className="w-full" />
+                <img src={product.urlImage} alt={product.altName} className="w-full h-[70vh] object-contain" />
               </div>
               <div className="w-1/2 pl-8">
                 <h1 className="text-4xl font-bold mb-4">{product.productName}</h1>
