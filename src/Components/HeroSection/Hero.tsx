@@ -15,8 +15,8 @@ const images = [
 const Hero: React.FC = () => {
   return (
     <div className="relative bg-gradient-to-t from-[#0101a7] via-[#015AFC] to-[#fdfdfd] text-center py-16">
-      <div className="absolute -top-15 left-0 w-1/4 h-full bg-no-repeat bg-left" style={{ backgroundImage: 'url(/img/Vector.svg)',opacity: 0.5 }}></div>
-      <div className="absolute -top-15 right-0 w-1/4 h-full bg-no-repeat bg-right" style={{ backgroundImage: 'url(/img/Vector.svg)',opacity: 0.5 }}></div>
+      <div className="absolute -top-11 left-0 w-1/4 h-full  bg-left" style={{ backgroundImage: 'url(/img/Vector.svg)',opacity: 0.5 }}></div>
+      <div className="absolute -top-10 right-0 w-1/4 h-full  bg-right" style={{ backgroundImage: 'url(/img/Vector.svg)',opacity: 0.5 }}></div>
       <p className="text-5xl font-bold  mb-4 relative z-10 text-gradient ">Potencia tu Negocio con <br />Softwares de Calidad</p>
       <p className="text-white mb-8 relative z-10">Licencias de Office, Windows, Eset, Kaspersky, <br />Adobe y más a precios competitivos.</p>
       <button className="bg-white text-[#0101a7] font-bold py-2 px-4 rounded-full relative z-10">¡Comprar Ahora!</button>

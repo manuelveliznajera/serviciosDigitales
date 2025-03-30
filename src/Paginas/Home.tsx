@@ -52,6 +52,7 @@ export const Home = () => {
         <SuscribirseSection />
 
     </div>
+
     <FooterSection className='pt-50' />
     </>
   )
