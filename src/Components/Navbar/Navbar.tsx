@@ -1,8 +1,7 @@
 import React from 'react';
-import { CiUser, CiShoppingCart } from "react-icons/ci";
-import { Link, useLocation } from 'react-router-dom';
+import { CiUser, CiShoppingCart, CiLogout } from "react-icons/ci";
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
-import Sidebar from '../Sidebar/Sidebar';
 
 const MenuItems = [
   { name: 'Softwares', path: '/softwares' },
@@ -11,18 +10,22 @@ const MenuItems = [
 ];
 
 const Navbar: React.FC<{ role: string | null }> = ({ role }) => {
-  const { isLoggedIn } = useAuthStore();
-  console.log(isLoggedIn, role);
+  const { isLoggedIn, logout } = useAuthStore(); // Obtener el estado y la función de logout desde el store
   const location = useLocation();
+  const navigate = useNavigate(); // Para redirigir después del logout
   const isHomePage = location.pathname === '/';
+
+  const handleLogout = () => {
+    logout(); // Limpiar el estado en Zustand
+    navigate('/auth/login'); // Redirigir al login
+  };
 
   return (
     <div className="flex flex-col p-1 gap-0.5 w-full">
-     
-
       <nav
         className={`flex items-center justify-between p-4 w-full ${
-          isHomePage ? "bg-white" : "bg-[#012FD3]"
+          isHomePage && !isLoggedIn  ? "bg-white text-[#012fd3]" : "bg-[#012FD3] text-white"
+          
         }`}
       >
         {/* Logo */}
@@ -85,14 +88,19 @@ const Navbar: React.FC<{ role: string | null }> = ({ role }) => {
             </span>
           </div>
           <Link
-            to="/auth/login"
+            to={isLoggedIn ? "#" : "/auth/login"}
+            onClick={isLoggedIn ? handleLogout : undefined}
             className={` ${
               isHomePage
                 ? "bg-blue-600 text-white pointer-events-auto"
                 : "bg-white text-blue-950 "
             } rounded-full p-2`}
           >
-            <CiUser />
+            {isLoggedIn ? (
+              <CiLogout className="text-2xl" />
+            ) : (
+              <CiUser className="text-2xl" />
+            )}
           </Link>
           <button
             className={` ${
@@ -105,7 +113,6 @@ const Navbar: React.FC<{ role: string | null }> = ({ role }) => {
           </button>
         </div>
       </nav>
-       
     </div>
   );
 };

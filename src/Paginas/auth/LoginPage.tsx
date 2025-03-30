@@ -7,7 +7,7 @@ export const LoginPage = () => {
   const [formData, setFormData] = useState({
     correo: '',
     password: '',
-    role: 'Cliente', // Valor por defecto
+
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
