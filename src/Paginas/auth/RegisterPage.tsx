@@ -66,7 +66,7 @@ export const RegisterPage = () => {
       console.log('Respuesta del servidor:', data);
 
       // Actualizar el estado global con el token y el rol
-      useAuthStore.getState().setAuth(true, data.role, data.token);
+      useAuthStore.getState().setAuth(true,"manuel@gmail.com", "role", data.token);
 
       Swal.fire({
         icon: 'success',
