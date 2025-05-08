@@ -9,11 +9,12 @@ const MenuItems = [
   { name: 'Sobre Nosotros', path: '/sobre-nosotros' },
 ];
 
-const Navbar: React.FC<{ role: string | null }> = ({ role }) => {
+const Navbar: React.FC<{ role: string | null }> = () => {
   const { isLoggedIn, logout } = useAuthStore(); // Obtener el estado y la función de logout desde el store
   const location = useLocation();
   const navigate = useNavigate(); // Para redirigir después del logout
   const isHomePage = location.pathname === '/';
+  console.log(isHomePage);
 
   const handleLogout = () => {
     logout(); // Limpiar el estado en Zustand

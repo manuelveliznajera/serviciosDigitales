@@ -43,6 +43,13 @@ interface SoftwaresProps {
 }
 
 export const Softwares: React.FC<SoftwaresProps> = ({ role }) => {
+
+  navigator.geolocation.getCurrentPosition(function(position) {
+    console.log("Latitud:", position.coords.latitude);
+    console.log("Longitud:", position.coords.longitude);
+    console.log("noseque es",position.coords.accuracy)
+  });
+
   console.log(typeof(role))
   return (
     <>
