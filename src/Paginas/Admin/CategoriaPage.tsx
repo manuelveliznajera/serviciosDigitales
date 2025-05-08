@@ -1,4 +1,3 @@
-import React from 'react';
 import AddCategoria from '../../Components/Categoria/AddCategoria';
 import ListCategoria from '../../Components/Categoria/ListCategoria';
 
