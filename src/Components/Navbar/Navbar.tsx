@@ -2,6 +2,7 @@ import React from 'react';
 import { CiUser, CiShoppingCart, CiLogout } from "react-icons/ci";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
+import { CartButton } from './CartButton';
 
 const MenuItems = [
   { name: 'Softwares', path: '/softwares' },
@@ -14,7 +15,6 @@ const Navbar: React.FC<{ role: string | null }> = () => {
   const location = useLocation();
   const navigate = useNavigate(); // Para redirigir después del logout
   const isHomePage = location.pathname === '/';
-  console.log(isHomePage);
 
   const handleLogout = () => {
     logout(); // Limpiar el estado en Zustand
@@ -103,15 +103,15 @@ const Navbar: React.FC<{ role: string | null }> = () => {
               <CiUser className="text-2xl" />
             )}
           </Link>
-          <button
+          <div
             className={` ${
               isHomePage
                 ? "bg-blue-600 text-white"
                 : "bg-white text-blue-950"
             } rounded-full p-2`}
           >
-            <CiShoppingCart />
-          </button>
+           <CartButton />
+          </div>
         </div>
       </nav>
     </div>

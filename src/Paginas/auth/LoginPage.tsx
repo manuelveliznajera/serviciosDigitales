@@ -75,7 +75,7 @@ export const LoginPage = () => {
       console.log('Respuesta del servidor:', data);
 
       // Actualizar el estado global con el token y el rol
-      useAuthStore.getState().setAuth(true, formData.correo, data.role, data.token);
+      useAuthStore.getState().setAuth(true, formData.correo, data.role, data.token, data.id);
 
       Swal.fire({
         icon: 'success',

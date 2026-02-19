@@ -2,11 +2,9 @@ import React from 'react';
 import { Product } from '../../Interfaces/Product';
 import CardGrid from '../ProductCard/CardGrid';
 
-interface ProductListProps {
-  products: Product[];
-}
 
-const BestSellers: React.FC<ProductListProps> = ( {products }) => {
+
+const BestSellers: React.FC<any> = ( { products }) => {
   return (
     <div className="py-30   flex flex-col justify-center ">
       <div className='flex justify-between mb-20'>

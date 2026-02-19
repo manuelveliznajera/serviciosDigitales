@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import './App.css';
+import { Toaster } from "react-hot-toast";
 import Navbar from './Components/Navbar/Navbar';
 import { Home } from './Paginas/Home';
 import { Softwares } from './Paginas/Softwares';
@@ -11,23 +12,26 @@ import { RegisterPage } from './Paginas/auth/RegisterPage';
 import { useAuthStore } from './store/authStore';
 import Sidebar from './Components/Sidebar/Sidebar';
 import { CategoriaPage } from './Paginas/Admin/CategoriaPage';
+import { ProductPage } from './Paginas/Admin/ProductPage';
+import { Checkout } from './Paginas/Checkout';
+import { CuponPage } from './Paginas/Admin/CuponPage';
+import { VentasPage } from './Paginas/Admin/VentasPage';
+import LicenciasPage from './Paginas/Admin/LicenciaPage';
 
 const DisenoGrafico = () => <div>Diseño Gráfico Page</div>;
 
 function App() {
   const { isLoggedIn, role } = useAuthStore(); // Obtener el estado de autenticación desde el store
-  console.log("aqui inicia app ", isLoggedIn, role);
 
   return (
     <BrowserRouter>
+    <Toaster position="top-right" />
       {/* Grid layout */}
       <div className="grid grid-rows-[auto_1fr] grid-cols-[auto_1fr] h-screen">
-        {/* Navbar en la parte superior */}
         <div className="row-span-1 col-span-2">
           <Navbar role={isLoggedIn ? role : null} />
         </div>
 
-        {/* Sidebar en el lado izquierdo (solo para Administrador) */}
         {role === 'Administrador' && (
           <div className="row-span-1 ml-1 col-span-1 bg-gray-100 text-white">
             <Sidebar />
@@ -37,11 +41,6 @@ function App() {
         {/* Contenido principal */}
         <div className={`row-span-1 ${role === 'Administrador' ? 'col-span-1' : 'col-span-2'} p-4`}>
           <Routes>
-            {
-              
-            }
-        
-            
             <Route path="/" element={ isLoggedIn  ?  <Navigate to="/admin" />: <Home />} />
 
             {/* Redirigir si el usuario ya está logueado */}
@@ -59,6 +58,8 @@ function App() {
             />
 
             <Route path="/softwares" element={<Softwares role={role} />} />
+            <Route path="/checkout" element={<Checkout />} />
+
             <Route path="/diseno-grafico" element={<DisenoGrafico />} />
             <Route path="/sobre-nosotros" element={<SobreNosotros />} />
             <Route path="/producto/:id" element={<ProductoDetalle />} />
@@ -77,10 +78,34 @@ function App() {
                   role === 'Administrador' ? <CategoriaPage /> : <Navigate to="/" replace />
                 }
               />
+               <Route
+                path="/admin/agregar-producto"
+                element={
+                  role === 'Administrador' ? <ProductPage /> : <Navigate to="/" replace />
+                }
+              />
               <Route
                 path="/admin/usuarios"
                 element={
                   role === 'Administrador' ? <div>Usuarios Page</div> : <Navigate to="/" replace />
+                }
+              />
+               <Route
+                path="/admin/cupones"
+                element={
+                  role === 'Administrador' ? <CuponPage /> : <Navigate to="/" replace />
+                }
+              />
+              <Route
+                path="/admin/ventas"
+                element={
+                  role === 'Administrador' ? <VentasPage /> : <Navigate to="/" replace />
+                }
+              />
+              <Route
+                path="/admin/licencias"
+                element={
+                  role === 'Administrador' ? <LicenciasPage /> : <Navigate to="/" replace />
                 }
               />
            

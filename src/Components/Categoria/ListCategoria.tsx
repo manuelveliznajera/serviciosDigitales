@@ -1,33 +1,94 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCategoriaStore } from '../../store/categoriaStore';
+import Swal from 'sweetalert2';
 
 const ListCategoria: React.FC = () => {
-  const { categorias, fetchCategorias, deleteCategoria, loading, error } = useCategoriaStore();
-console.log(categorias);
+  const { categorias, fetchCategorias, deleteCategoria, updateCategoria, loading, error } = useCategoriaStore();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editCategoria, setEditCategoria] = useState<any>(null);
+  const [editNombre, setEditNombre] = useState('');
+  const [editDescripcion, setEditDescripcion] = useState('');
+  const [editImagen, setEditImagen] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+
   // useEffect para cargar las categorías al montar el componente
   useEffect(() => {
     fetchCategorias();
   }, [fetchCategorias]);
 
-  const handleEdit = (id: string) => {
-    console.log(`Editar categoría con ID: ${id}`);
-    // Aquí puedes redirigir a una página de edición o abrir un modal
+  const handleEdit = (categoria: any) => {
+    setEditCategoria(categoria);
+    setEditNombre(categoria.nombre);
+    setEditDescripcion(categoria.descripcion);
+    setPreview(`http://localhost:3000/uploads/${categoria.imagen}`);
+    setEditImagen(null);
+    setModalOpen(true);
   };
 
   const handleDelete = async (id: string) => {
-    const confirm = window.confirm('¿Estás seguro de que deseas eliminar esta categoría?');
-    if (!confirm) return;
+    const confirm = await Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta acción eliminará la categoría.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    });
+    if (!confirm.isConfirmed) return;
 
     try {
       await fetch(`http://localhost:3000/api/categoria/${id}`, {
         method: 'DELETE',
       });
 
-      deleteCategoria(id); // Actualizar el estado global después de eliminar
-      alert('Categoría eliminada exitosamente');
+      deleteCategoria(id);
+      Swal.fire('Eliminado', 'Categoría eliminada exitosamente', 'success');
     } catch (err: any) {
       console.error('Error al eliminar la categoría:', err);
-      alert(err.message || 'Error desconocido');
+      Swal.fire('Error', err.message || 'Error desconocido', 'error');
+    }
+  };
+
+  const handleUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editNombre.trim() || !editDescripcion.trim()) {
+      Swal.fire('Error', 'Todos los campos son obligatorios.', 'error');
+      return;
+    }
+    try {
+      const data = new FormData();
+      data.append('nombre', editNombre);
+      data.append('descripcion', editDescripcion);
+      if (editImagen) {
+        data.append('imagen', editImagen);
+      }
+      console.log(editImagen)
+
+      const response = await fetch(`http://localhost:3000/api/categoria/${editCategoria.id}`, {
+        method: 'PUT',
+        body: data,
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Error al actualizar la categoría');
+      }
+      const updated = await response.json();
+      updateCategoria(editCategoria.id, updated);
+      setModalOpen(false);
+      Swal.fire('Éxito', 'Categoría actualizada exitosamente.', 'success');
+    } catch (err: any) {
+      Swal.fire('Error', err.message || 'Error desconocido', 'error');
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setEditImagen(e.target.files[0]);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result as string);
+      };
+      reader.readAsDataURL(e.target.files[0]);
     }
   };
 
@@ -56,7 +117,7 @@ console.log(categorias);
             <tr key={categoria.id} className="border-b border-gray-200">
               <td className="py-2 px-4">
                 <img
-                  src={` http://localhost:3000/uploads/${categoria.imagen}`}
+                  src={`http://localhost:3000/uploads/${categoria.imagen}`}
                   alt={categoria.nombre}
                   className="h-12 w-12 object-cover rounded-full"
                 />
@@ -65,7 +126,7 @@ console.log(categorias);
               <td className="py-2 px-4">{categoria.descripcion}</td>
               <td className="py-2 px-4 flex justify-center space-x-2">
                 <button
-                  onClick={() => handleEdit(categoria.id)}
+                  onClick={() => handleEdit(categoria)}
                   className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
                 >
                   Editar
@@ -81,6 +142,72 @@ console.log(categorias);
           ))}
         </tbody>
       </table>
+
+      {/* Modal para editar */}
+      {modalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md relative">
+            <button
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl"
+              onClick={() => setModalOpen(false)}
+            >
+              ×
+            </button>
+            <h3 className="text-xl font-bold mb-4">Editar Categoría</h3>
+            <form onSubmit={handleUpdate} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Imagen actual</label>
+                {preview && (
+                  <img
+                    src={preview}
+                    alt="Vista previa"
+                    className="w-32 h-32 object-cover rounded-lg border mb-2"
+                  />
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="mt-2 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Nombre</label>
+                <input
+                  type="text"
+                  value={editNombre}
+                  onChange={e => setEditNombre(e.target.value)}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Descripción</label>
+                <textarea
+                  value={editDescripcion}
+                  onChange={e => setEditDescripcion(e.target.value)}
+                  rows={3}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => setModalOpen(false)}
+                  className="bg-gray-400 text-white px-4 py-2 rounded-lg mr-2 hover:bg-gray-500"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                >
+                  Guardar Cambios
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

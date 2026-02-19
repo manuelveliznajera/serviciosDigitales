@@ -2,6 +2,7 @@ import FooterSection from "../Components/FooterSection/FooterSection";
 import CardGrid from "../Components/ProductCard/CardGrid";
 import SuscribirseSection from "../Components/SuscribirseSection/SuscribirseSection";
 import { Product } from "../Interfaces/Product";
+import { useProductStore } from "../store/productStore";
 
 const products: Product[] = [
   {
@@ -44,18 +45,14 @@ interface SoftwaresProps {
 
 export const Softwares: React.FC<SoftwaresProps> = ({ role }) => {
 
-  navigator.geolocation.getCurrentPosition(function(position) {
-    console.log("Latitud:", position.coords.latitude);
-    console.log("Longitud:", position.coords.longitude);
-    console.log("noseque es",position.coords.accuracy)
-  });
+ const {productos} = useProductStore();
 
-  console.log(typeof(role))
+console.log(productos , "productos en softwares")
   return (
     <>
       <div className="container mx-auto py-20">
         <h2 className="text-3xl font-bold mb-20">Softwares</h2>
-        <CardGrid products={products} />
+        <CardGrid products={productos} />
       </div>
     
        

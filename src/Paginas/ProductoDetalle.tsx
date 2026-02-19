@@ -1,78 +1,77 @@
 import ProductCard from '../Components/ProductCard/ProductCard';
 import SuscribirseSection from '../Components/SuscribirseSection/SuscribirseSection';
 import FooterSection from '../Components/FooterSection/FooterSection';
-import { Product } from '../Interfaces/Product';
 import { useParams } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useProductStore } from '../store/productStore';
 
-const products: Product[] = [
-    {
-      id: "1",
-      urlImage: "/img/soft/Office2021.png",
-      altName: "Office Professional Plus 2021",
-      productName: "Office Professional Plus 2021",
-      originalPrice: "Q295",
-      discountedPrice: "Q115",
-    },
-    {
-      id: "2",
-      urlImage: "/img/soft/Windows11Pro.png",
-      altName: "Microsoft Windows 11 Pro",
-      productName: "Microsoft Windows 11 Pro",
-      originalPrice: "Q150",
-      discountedPrice: "Q80",
-    },
-    {
-      id: "3",
-      urlImage: "/img/soft/Internet.png",
-      altName: "ESET Internet Security",
-      productName: "ESET Internet Security",
-      originalPrice: "Q195",
-      discountedPrice: "Q90",
-    },
-    {
-      id: "4",
-      urlImage: "/img/soft/Civil3D.png",
-      altName: "Civil 3D",
-      productName: "Autodesk Civil 3D",
-      originalPrice: "Q325",
-      discountedPrice: "Q180",
-    }
-];
 export const ProductoDetalle = () => {
-    const { id } = useParams<{ id: string }>();
-    useEffect(() => {
-      window.scrollTo(0, 0);
-    }, [id]);
-    const product = products.find((product) => product.id === id);
-    if (!product) {
-        return <div>Producto no encontrado</div>;
+     const { id } = useParams<{ id: string }>();
+  const productos = useProductStore((state) => state.productos);
+  console.log(productos,"productos del store");
+  const [producto, setProducto] = useState<any>(null);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+
+    const fetchProducto = async () => {
+      if (!id) return;
+
+      // buscar en el store primero
+      const encontrado = productos.find((p) => String(p.id) === id);
+
+      if (encontrado) {
+        setProducto(encontrado);
+      } else {
+        // si no está en el store, podrías llamar a getProductoById del store
+        // const resultado = await getProductoById(id);
+        // setProducto(resultado);
+        console.warn(`Producto con id ${id} no encontrado en el store`);
       }
+    };
+
+    fetchProducto();
+  }, [id, productos]);
+
+  if (!producto) {
+    return <div>Producto no encontrado</div>;
+  }
+   
   return (
     
         <>
           <div className="container mx-auto py-16">
-            <div className="flex justify-between items-center mb-8">
+            <div className="flex justify-between  mb-8">
               <div className="w-1/2">
-                <img src={product.urlImage} alt={product.altName} className="w-full h-[70vh] object-contain" />
+              
+               
+                <img src={producto.urlImage} alt={producto.altName} className="w-full h-[80vh] object-contain" />
               </div>
               <div className="w-1/2 pl-8">
-                <h1 className="text-4xl font-bold mb-4">{product.productName}</h1>
-                <p className="text-2xl text-blue-600 mb-4">Q115</p>
-                <p className="text-gray-500 line-through mb-4">Q295</p>
-                <button className="bg-blue-600 text-white py-2 px-4 rounded-full mb-4">Añadir Al Carrito</button>
-                <button className="bg-blue-600 text-white py-2 px-4 rounded-full">Comprar Ahora</button>
+              <span className="text-xl text-gray-500">SKU: {producto.id}</span> 
+                <h1 className="text-4xl font-bold mb-4">{producto.productName}</h1>
+                <p className="text-2xl text-blue-600 mb-4">{producto.discountedPrice}</p>
+                <p className="text-gray-500 line-through mb-4">{producto.originalPrice}</p>
+                <button className="bg-[#0098DB] text-white py-2 px-4 rounded-full mb-4 mt-5">Añadir Al Carrito</button>
+                <button className="bg-blue-600 text-white py-2 px-4 rounded-full mt-14 mb-14 ml-4" >Comprar Ahora</button>
                 <ul className="mt-4">
+               
                   <li>Empresa: Microsoft</li>
                   <li>Tipo de Entrega: Email</li>
                   <li>Sistema Operativo: Windows</li>
                   <li>Límite de Activación: 1 PC</li>
                 </ul>
+
+                <div>
+                <img src="/img/iconosProductoDetalle.png" alt="Garantía" className="w-90 h-auto mt-10" />
               </div>
+              </div>
+              
             </div>
             <h2 className="text-3xl font-bold mb-8">Productos sugeridos</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {products.map((product, index) => (
+              {productos.map((product, index) => (
+                console.log(product.id),
                 <ProductCard
                   key={index}
                   id={product.id}

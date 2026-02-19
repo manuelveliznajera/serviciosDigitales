@@ -4,7 +4,9 @@ import InfoExtras from '../Components/ProductCard/InfoExtraSection/InfoExtrasSec
 import ResenaSection from '../Components/ResenaSection/ResenaSection'
 import SuscribirseSection from '../Components/SuscribirseSection/SuscribirseSection'
 import FooterSection from '../Components/FooterSection/FooterSection'
-import { Product } from '../Interfaces/Product'
+import { Product } from '../Interfaces/Product';
+import { useProductStore } from '../store/productStore'
+import { useEffect, useState } from 'react'
 const products: Product[] = [
   {
     id: "1",
@@ -39,11 +41,23 @@ const products: Product[] = [
     discountedPrice: "Q180",
   }]
 export const Home = () => {
+  const {productos ,fetchProductos } = useProductStore();
+  useEffect(() => {
+      fetchProductos();
+      
+      }, [])
+  
+      console.log( "Productos en homeTsx desde store",productos)
+
+
+  
+
   return (
     <>   
     < Hero />
     <div className='container mx-auto'>
-        <BestSellers products={products} />
+
+       <BestSellers products={productos} /> 
         
     </div>
     <InfoExtras />
