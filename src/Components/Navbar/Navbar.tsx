@@ -1,5 +1,5 @@
 import React from 'react';
-import { CiUser, CiShoppingCart, CiLogout } from "react-icons/ci";
+import { CiUser,  CiLogout } from "react-icons/ci";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
 import { CartButton } from './CartButton';

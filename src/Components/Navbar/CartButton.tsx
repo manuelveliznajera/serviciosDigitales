@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { CiShoppingCart } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import { CartSidebar } from "./CartSideBar";
-import { ProductoCart } from "../../Interfaces/ProductoCart";
 import { useCartStore } from "../../store/useCartStore";
 
 export const CartButton: React.FC = () => {
@@ -11,16 +10,14 @@ export const CartButton: React.FC = () => {
 
   const {
     productos,
-    addProducto,
+   
     aumentarCantidad,
     disminuirCantidad,
     removeProducto,
-    total,
+   
   } = useCartStore();
 
-  const handleAddToCart = (p: ProductoCart) => {
-    addProducto({ ...p, cantidad: p.cantidad || 1 });
-  };
+
 
   const handleVerTodo = () => {
     navigate("/checkout");

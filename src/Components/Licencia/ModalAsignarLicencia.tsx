@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect,  useState } from "react";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import { fetchWithAuth } from "../../helpers/fetchWithAuth";
@@ -33,7 +33,7 @@ export const ModalAsignarLicencia: React.FC<ModalAsignarLicenciaProps> = ({
   open,
   licenciaId,
   onClose,
-  onAssigned,
+ 
 }) => {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);

@@ -21,7 +21,7 @@ export const ListProduct: React.FC<ListProductProps> = ({ productos, fetchProduc
   const [editCategoriaId, setEditCategoriaId] = useState(0);
   const [preview, setPreview] = useState<string | null>(null);
 
-  const { categorias, fetchCategorias } = useCategoriaStore();
+  const { categorias } = useCategoriaStore();
 
   const updateProducto = useProductStore(state => state.updateProducto); 
   const deleteProducto = useProductStore(state => state.deleteProducto); // Obtén el método del store

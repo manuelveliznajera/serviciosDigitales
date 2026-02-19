@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { useProductStore } from '../../store/productStore';
 import { useCategoriaStore } from '../../store/categoriaStore'; // Importa el store de categorías
-import { useAuthStore } from '../../store/authStore';
 
 export const AddProduct = () => {
   const [formData, setFormData] = useState({
@@ -20,7 +19,7 @@ export const AddProduct = () => {
   const [errores, setErrores] = useState<any>({});
 
   const addProducto = useProductStore(state => state.addProducto);
-  const token = useAuthStore( state => state.token)
+
   // Usar zustand para categorías
   const { categorias, fetchCategorias } = useCategoriaStore();
 
