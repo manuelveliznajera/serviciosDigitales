@@ -11,9 +11,12 @@ export const LoginPage = () => {
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
   };
+
+const API_URL = import.meta.env.VITE_API_URL;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,7 +53,7 @@ export const LoginPage = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/api/usuario/login", {
+      const response = await fetch(`${API_URL}/api/usuario/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
