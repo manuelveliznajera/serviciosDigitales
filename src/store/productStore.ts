@@ -47,18 +47,24 @@ export const useProductStore = create<ProductStore>((set) => ({
     try {
       const res = await fetchWithAuth("http://localhost:3000/api/producto");
       const data = await res.json();
+      console.log("Respuesta del backend:", data);
       const API_URL = "http://localhost:3000/uploads/";
 
-      const productosNewArray: ProductoTransformado[] = data.map((p: Producto) => ({
+      
+
+
+
+      const productosNewArray: ProductoTransformado[] = data.map((p: Producto) => (
+        console.log("Producto original:", p),
+        {
         id: String(p.id),
-        urlImage: `${API_URL}${p.imagen}`,
+        urlImage: p.imagen,
         altName: p.nombreProducto,
         productName: p.nombreProducto,
         originalPrice: `Q${Math.round(p.precioPublico * 1.3)}`,
         discountedPrice: `Q${p.precioPublico}`,
         description: p.descripcion
       }));
-      console.log(data, "data en proudctstore.ts")
 
       // Guardar en store y localStorage
       localStorage.setItem("productos", JSON.stringify(productosNewArray));

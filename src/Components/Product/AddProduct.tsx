@@ -4,6 +4,7 @@ import { useProductStore } from '../../store/productStore';
 import { useCategoriaStore } from '../../store/categoriaStore'; // Importa el store de categorías
 
 export const AddProduct = () => {
+  const [loading, setLoading] = useState(false);  
   const [formData, setFormData] = useState({
     nombreProducto: '',
     descripcion: '',
@@ -75,6 +76,7 @@ export const AddProduct = () => {
     }
 
        try {
+        setLoading(true);
         const res = await addProducto(data); // ahora devuelve el producto creado
         console.log("response en addproduct,", res);
 
@@ -89,6 +91,7 @@ export const AddProduct = () => {
           favorito: false,
           imagen: null,
         });
+        setLoading(false);
         setPreview(null);
         setErrores({});
       } catch (err: any) {
@@ -218,9 +221,13 @@ export const AddProduct = () => {
         </div>
         <button
           type="submit"
-          className="w-full py-2 px-4 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+          className={`w-full py-2 px-4 rounded-lg text-white ${
+            loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+          }`}
+          disabled={loading}
         >
-          Crear Producto
+            {loading ? 'Creando...' : 'Crear Producto'}
+         
         </button>
       </form>
     </div>

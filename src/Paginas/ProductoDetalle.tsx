@@ -6,6 +6,9 @@ import { useEffect, useState } from 'react';
 import { useProductStore } from '../store/productStore';
 
 export const ProductoDetalle = () => {
+  const CLOUD = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+
+
      const { id } = useParams<{ id: string }>();
   const productos = useProductStore((state) => state.productos);
   console.log(productos,"productos del store");
@@ -45,7 +48,10 @@ export const ProductoDetalle = () => {
               <div className="w-1/2">
               
                
-                <img src={producto.urlImage} alt={producto.altName} className="w-full h-[80vh] object-contain" />
+                <img 
+                src={`https://res.cloudinary.com/${CLOUD}/image/upload/${producto.urlImage}`}
+                alt={producto.altName} 
+                className="w-full h-[80vh] object-contain" />
               </div>
               <div className="w-1/2 pl-8">
               <span className="text-xl text-gray-500">SKU: {producto.id}</span> 

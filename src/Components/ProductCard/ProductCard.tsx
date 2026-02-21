@@ -12,6 +12,8 @@ const ProductCard: React.FC<Product> = ({
   originalPrice,
   discountedPrice,
 }) => {
+      const CLOUD = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+      console.log("CLOUD en ProductCard:", urlImage, CLOUD);
   const addProducto = useCartStore((state) => state.addProducto);
 
   // Convierte "Q125" a número 125
@@ -36,7 +38,7 @@ const ProductCard: React.FC<Product> = ({
   return (
     <div className="bg-gray-100 shadow-md rounded-lg p-2 flex flex-col">
       <img
-        src={urlImage}
+        src={`https://res.cloudinary.com/${CLOUD}/image/upload/${urlImage}`}
         alt={altName}
         className="w-full h-70 rounded-lg p-1 bg-white"
       />

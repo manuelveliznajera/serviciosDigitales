@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 import { useCategoriaStore } from '../../store/categoriaStore';
+import { fetchWithAuth } from '../../helpers/fetchWithAuth';
 
 const AddCategoria: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -65,7 +66,7 @@ const AddCategoria: React.FC = () => {
     data.append('descripcion', formData.descripcion);
 
     try {
-      const response = await fetch('http://localhost:3000/api/categoria/', {
+      const response = await fetchWithAuth('http://localhost:3000/api/categoria/', {
         method: 'POST',
         body: data,
       });

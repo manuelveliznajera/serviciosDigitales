@@ -8,7 +8,12 @@ interface ListProductProps {
   fetchProductos: () => void;
 }
 
+const CLOUD = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+
+
+
 export const ListProduct: React.FC<ListProductProps> = ({ productos, fetchProductos }) => {
+  const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [editProducto, setEditProducto] = useState<any>(null);
   const [editNombre, setEditNombre] = useState('');
@@ -43,11 +48,10 @@ export const ListProduct: React.FC<ListProductProps> = ({ productos, fetchProduc
      // Obtén el método del store
     
     try {
-      const productoBorrado = await deleteProducto(id);
+      await deleteProducto(id);
 
-     console.log(productoBorrado)
       Swal.fire('Eliminado', 'Producto eliminado exitosamente', 'success');
-      // Aquí deberías llamar a fetchProductos desde el padre o el store para actualizar la lista
+      fetchProductos();
     } catch (err: any) {
       Swal.fire('Error', err.message || 'Error desconocido', 'error');
     }
@@ -63,7 +67,10 @@ export const ListProduct: React.FC<ListProductProps> = ({ productos, fetchProduc
       setEditPrecioCosto(String(prod.precioCosto));
       setEditPrecioPublico(String(prod.precioPublico));
       setEditFavorito(prod.favorito);
-      setPreview(prod.imagen ? `http://localhost:3000/uploads/${prod.imagen}` : null);
+      const CLOUD = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+
+
+      setPreview(prod.imagen ? `https://res.cloudinary.com/${CLOUD}/image/upload/${prod.imagen}` : null);
       setEditCategoriaId(prod.categoriaId);
       setEditImagen(null);
       setModalOpen(true);
@@ -84,7 +91,8 @@ export const ListProduct: React.FC<ListProductProps> = ({ productos, fetchProduc
   // Enviar cambios al backend
   const handleEditBd = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!editProducto) return;
+    if (!editProducto || loading) return;
+    setLoading(true);
 
     const data = new FormData();
     if (editNombre.trim()) data.append('nombreProducto', editNombre);
@@ -105,9 +113,11 @@ export const ListProduct: React.FC<ListProductProps> = ({ productos, fetchProduc
       Swal.fire('Éxito', 'Producto actualizado exitosamente.', 'success');
     } catch (err: any) {
       Swal.fire('Error', err.message || 'Error desconocido', 'error');
+    } finally {
+      setLoading(false);
     }
   };
-
+console.log(productos);
   
   if (!productos || !Array.isArray(productos) || productos.length === 0)  {
   return <div className="text-center py-8">No hay productos para mostrar.</div>;
@@ -136,7 +146,7 @@ export const ListProduct: React.FC<ListProductProps> = ({ productos, fetchProduc
               <td className="py-2 px-4">
                 {producto.imagen ? (
                   <img
-                    src={`http://localhost:3000/uploads/${producto.imagen}`}
+                    src={`https://res.cloudinary.com/${CLOUD}/image/upload/${producto.imagen}`} 
                     alt={producto.nombreProducto}
                     className="h-12 w-12 object-cover rounded"
                   />
@@ -288,9 +298,12 @@ export const ListProduct: React.FC<ListProductProps> = ({ productos, fetchProduc
                 </button>
                 <button
                   type="submit"
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                  className={`text-white px-4 py-2 rounded-lg ${
+                    loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+                  }`}
+                  disabled={loading}
                 >
-                  Guardar Cambios
+                  {loading ? 'Guardando...' : 'Guardar Cambios'}
                 </button>
               </div>
             </form>

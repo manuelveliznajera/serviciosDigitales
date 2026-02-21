@@ -4,6 +4,8 @@ import CardGrid from '../ProductCard/CardGrid';
 
 
 const BestSellers: React.FC<any> = ( { products }) => {
+
+  
   return (
     <div className="py-30   flex flex-col justify-center ">
       <div className='flex justify-between mb-20'>

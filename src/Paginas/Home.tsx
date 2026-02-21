@@ -13,12 +13,7 @@ export const Home = () => {
       fetchProductos();
       
       }, [])
-  
-      console.log( "Productos en homeTsx desde store",productos)
-
-
-  
-
+console.log("productos en home", productos)
   return (
     <>   
     < Hero />

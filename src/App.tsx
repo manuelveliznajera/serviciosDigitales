@@ -17,6 +17,7 @@ import { Checkout } from './Paginas/Checkout';
 import { CuponPage } from './Paginas/Admin/CuponPage';
 import { VentasPage } from './Paginas/Admin/VentasPage';
 import LicenciasPage from './Paginas/Admin/LicenciaPage';
+import { UsuarioPage } from './Paginas/Admin/UsuarioPage';
 
 const DisenoGrafico = () => <div>Diseño Gráfico Page</div>;
 
@@ -87,7 +88,7 @@ function App() {
               <Route
                 path="/admin/usuarios"
                 element={
-                  role === 'Administrador' ? <div>Usuarios Page</div> : <Navigate to="/" replace />
+                  role === 'Administrador' ? <UsuarioPage /> : <Navigate to="/" replace />
                 }
               />
                <Route

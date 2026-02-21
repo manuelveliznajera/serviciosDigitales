@@ -17,6 +17,7 @@ export const LoginPage = () => {
   };
 
 const API_URL = import.meta.env.VITE_API_URL;
+const urldeveloper = 'http://localhost:3000';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,7 +54,7 @@ const API_URL = import.meta.env.VITE_API_URL;
     }
 
     try {
-      const response = await fetch(`${API_URL}/api/usuario/login`, {
+      const response = await fetch(`${urldeveloper}/api/usuario/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -65,6 +66,7 @@ const API_URL = import.meta.env.VITE_API_URL;
       });
 
       if (!response.ok) {
+        console.log('Error en la respuesta del servidor:', response.status, response.statusText);
         const errorData = await response.json();
         Swal.fire({
           icon: 'error',
