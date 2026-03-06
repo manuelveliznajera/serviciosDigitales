@@ -59,6 +59,8 @@ function App() {
             />
 
             <Route path="/softwares" element={<Softwares role={role} />} />
+            
+
             <Route path="/checkout" element={<Checkout />} />
 
             <Route path="/diseno-grafico" element={<DisenoGrafico />} />

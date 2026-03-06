@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const images = [
     { urlImage: "/img/soft/Autodesk.png", altName: "AutoCAD" },
@@ -19,7 +20,7 @@ const Hero: React.FC = () => {
       <div className="absolute -top-10 right-0 w-1/4 h-full  bg-right" style={{ backgroundImage: 'url(/img/Vector.svg)',opacity: 0.5 }}></div>
       <p className="text-5xl font-bold  mb-4 relative z-10 text-gradient ">Potencia tu Negocio con <br />Softwares de Calidad</p>
       <p className="text-white mb-8 relative z-10">Licencias de Office, Windows, Eset, Kaspersky, <br />Adobe y más a precios competitivos.</p>
-      <button className="bg-white text-[#0101a7] font-bold py-2 px-4 rounded-full relative z-10">¡Comprar Ahora!</button>
+      <Link to="/softwares" className="bg-white text-[#0101a7] font-bold py-2 px-4 rounded-full relative z-10">¡Comprar Ahora!</Link>
       <div className="flex w-full mt-8 space-x-4 overflow-x-auto relative z-10">
       {
         images.map((image, index) => (

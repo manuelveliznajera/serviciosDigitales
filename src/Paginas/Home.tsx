@@ -18,8 +18,7 @@ console.log("productos en home", productos)
     <>   
     < Hero />
     <div className='container mx-auto'>
-
-       <BestSellers products={productos} /> 
+    <BestSellers products={productos} /> 
         
     </div>
     <InfoExtras />

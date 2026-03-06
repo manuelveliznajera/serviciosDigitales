@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useForm } from 'react-hook-form';
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useNavigate } from "react-router-dom";
 import { useCartStore } from "../store/useCartStore";
 import ValidaCupon from "../Components/Checkout/ValidaCupon";
 import { useAuthStore } from "../store/authStore";
@@ -29,30 +30,19 @@ const schema = yup.object().shape({
 type FormData = yup.InferType<typeof schema>;
 
 export const Checkout: React.FC = () => {
+  const navigate = useNavigate();
 
   const id = useAuthStore((state) => state.id);
-  console.log(id, "id del usuario en checkout");
   let userId = 6;
   if (id) {
     userId = parseInt(id);
   }
-  console.log(userId, "userId en checkout");
     
   const { productos, clearCart } = useCartStore();
-  console.log("productos en checkout", productos.length);
-  if (productos.length === 0) {
-    return (
-      <div className="max-w-7xl mx-auto px-4 py-10">
-        <h2 className="text-2xl font-bold mb-4 text-gray-800">Carrito Vacío</h2>
-        <p className="text-gray-600">No tienes productos en tu carrito. Agrega algunos para proceder al checkout.</p>
-      </div>
-    );
-  }
   const total = productos.reduce((acc, p) => acc + p.precio * p.cantidad, 0);
   const [totalConDescuento, setTotalConDescuento] = useState(total);
   const [cupon , setCupon] = useState("");
 
-  console.log(productos, "productos en checkout");
 
   // Estado método de pago y comprobante
   const [metodoPagoId, setMetodoPagoId] = useState("");
@@ -63,6 +53,15 @@ export const Checkout: React.FC = () => {
   const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
+
+  if (productos.length === 0) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-10">
+        <h2 className="text-2xl font-bold mb-4 text-gray-800">Carrito Vacío</h2>
+        <p className="text-gray-600">No tienes productos en tu carrito. Agrega algunos para proceder al checkout.</p>
+      </div>
+    );
+  }
 
   // Aplicar descuento de cupón
   const onDescuentoAplicado = (descuento: number) => {
@@ -97,12 +96,7 @@ export const Checkout: React.FC = () => {
     }));
 
     try {
-      console.log(detallesVenta, "detalles de venta");
-      // 1️⃣ Crear venta
-      console.log(data, "data del formulario");
-      console.log(metodoPagoId, "metodo pago id");
-      console.log(comprobantePago, "comprobante pago");
-      console.log(totalConDescuento, "total con descuento");  
+    
       const ventaForm = new FormData();
       ventaForm.append("usuarioId", userId.toString());
       ventaForm.append("nombreCompleto", data.nombreCompleto);
@@ -121,37 +115,28 @@ export const Checkout: React.FC = () => {
 ventaForm.forEach((value, key) => {
   formObj[key] = value;
 });
-console.log(formObj);
 
       const resVenta = await fetch("http://localhost:3000/api/ventas", {
         method: "POST",
         body: ventaForm,
       });
 
+      console.log("Respuesta de la API:", resVenta);
+
       if (!resVenta.ok) throw new Error("Error al crear la venta");
-
-     
-
-      // 2️⃣ Crear detalle de venta
-     
-
-    
 
       alert("Venta y detalle de venta guardados con éxito 🎉");
 
-      // 3️⃣ Limpiar carrito
       clearCart();
 
-      // 4️⃣ Limpiar formulario
       reset();
 
-      // 5️⃣ Limpiar comprobante y preview
       setComprobantePago(null);
       setPreview(null);
 
-      // 6️⃣ Resetear total y método de pago
       setTotalConDescuento(total);
       setMetodoPagoId("");
+      navigate("/softwares");
 
     } catch (err: any) {
       alert(err.message || "Ocurrió un error");

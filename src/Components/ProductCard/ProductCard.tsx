@@ -13,7 +13,6 @@ const ProductCard: React.FC<Product> = ({
   discountedPrice,
 }) => {
       const CLOUD = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
-      console.log("CLOUD en ProductCard:", urlImage, CLOUD);
   const addProducto = useCartStore((state) => state.addProducto);
 
   // Convierte "Q125" a número 125

@@ -19,6 +19,7 @@ export const VentasPage = () => {
   const [ventas, setVentas] = useState<Venta[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedComprobante, setSelectedComprobante] = useState<string | null>(null);
+    const CLOUD = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
 
   // Cargar ventas desde el backend
   const fetchVentas = async () => {
@@ -122,8 +123,7 @@ export const VentasPage = () => {
                       <button
                         onClick={() =>
                           setSelectedComprobante(
-                            `http://localhost:3000/${venta.comprobantePago}`
-                          )
+                            `https://res.cloudinary.com/${CLOUD}/image/upload/${venta.comprobantePago}`)
                         }
                         className="text-blue-600 hover:text-blue-800 transition"
                         title="Ver comprobante"
