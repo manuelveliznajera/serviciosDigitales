@@ -63,8 +63,9 @@ export const LoginPage = () => {
         }),
       });
 
+      console.log( "response", response);
+
       if (!response.ok) {
-        console.log('Error en la respuesta del servidor:', response.status, response.statusText);
         const errorData = await response.json();
         Swal.fire({
           icon: 'error',
@@ -74,11 +75,24 @@ export const LoginPage = () => {
         return;
       }
 
-      const data = await response.json();
-      console.log('Respuesta del servidor:', data);
+	      const data = await response.json();
+	      console.log('Respuesta del servidor:', data);
 
-      // Actualizar el estado global con el token y el rol
-      useAuthStore.getState().setAuth(true, formData.correo, data.role, data.token, data.id);
+        const token = data.token ?? data.accessToken ?? data?.data?.token;
+        const role = data.role ?? data?.usuario?.role ?? data?.data?.role ?? '';
+        const userId = data.id ?? data?.usuario?.id ?? data?.data?.id;
+
+        if (!token) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Login exitoso pero el backend no devolvió token.',
+          });
+          return;
+        }
+
+	      // Actualizar el estado global con el token y el rol
+	      useAuthStore.getState().setAuth(true, formData.correo, role, token, String(userId ?? ''));
 
       Swal.fire({
         icon: 'success',
