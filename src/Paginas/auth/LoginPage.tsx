@@ -16,7 +16,6 @@ export const LoginPage = () => {
     setFormData({ ...formData, [id]: value });
   };
 
-const API_URL = import.meta.env.VITE_API_URL;
 const urldeveloper = 'http://localhost:3000';
 
   const handleSubmit = async (e: React.FormEvent) => {

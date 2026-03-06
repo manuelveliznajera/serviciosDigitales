@@ -47,15 +47,8 @@ export const useProductStore = create<ProductStore>((set) => ({
     try {
       const res = await fetchWithAuth("http://localhost:3000/api/producto");
       const data = await res.json();
-      console.log("Respuesta del backend:", data);
-      const API_URL = "http://localhost:3000/uploads/";
-
-      
-
-
 
       const productosNewArray: ProductoTransformado[] = data.map((p: Producto) => (
-        console.log("Producto original:", p),
         {
         id: String(p.id),
         urlImage: p.imagen,
