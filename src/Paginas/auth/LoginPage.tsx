@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { useAuthStore } from '../../store/authStore';
+import { API_BASE_URL } from '../../config/api';
 
 export const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -15,8 +16,6 @@ export const LoginPage = () => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
   };
-
-const urldeveloper = 'http://localhost:3000';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,7 +52,7 @@ const urldeveloper = 'http://localhost:3000';
     }
 
     try {
-      const response = await fetch(`${urldeveloper}/api/usuario/login`, {
+      const response = await fetch(`${API_BASE_URL}/api/usuario/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useCartStore } from "../store/useCartStore";
 import ValidaCupon from "../Components/Checkout/ValidaCupon";
 import { useAuthStore } from "../store/authStore";
+import { API_BASE_URL } from "../config/api";
 
 // Validación del formulario con Yup
 const schema = yup.object().shape({
@@ -116,7 +117,7 @@ ventaForm.forEach((value, key) => {
   formObj[key] = value;
 });
 
-      const resVenta = await fetch("http://localhost:3000/api/ventas", {
+      const resVenta = await fetch(`${API_BASE_URL}/api/ventas`, {
         method: "POST",
         body: ventaForm,
       });

@@ -1,5 +1,19 @@
 import { create } from "zustand";
 import { fetchWithAuth } from "../helpers/fetchWithAuth";
+import { API_BASE_URL, API_UPLOADS_URL } from "../config/api";
+
+const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+
+const buildImageUrl = (imagen?: string) => {
+  if (!imagen) return "";
+  if (imagen.startsWith("http://") || imagen.startsWith("https://")) return imagen;
+
+  if (CLOUD_NAME) {
+    return `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/${imagen}`;
+  }
+
+  return `${API_UPLOADS_URL}${imagen}`;
+};
 
 interface Producto {
   id: string;
@@ -45,13 +59,13 @@ export const useProductStore = create<ProductStore>((set) => ({
   fetchProductos: async () => {
     set({ loading: true, error: null });
     try {
-      const res = await fetchWithAuth("http://localhost:3000/api/producto");
+      const res = await fetchWithAuth(`${API_BASE_URL}/api/producto`);
       const data = await res.json();
 
       const productosNewArray: ProductoTransformado[] = data.map((p: Producto) => (
         {
         id: String(p.id),
-        urlImage: p.imagen,
+        urlImage: buildImageUrl(p.imagen),
         altName: p.nombreProducto,
         productName: p.nombreProducto,
         originalPrice: `Q${Math.round(p.precioPublico * 1.3)}`,
@@ -76,14 +90,13 @@ export const useProductStore = create<ProductStore>((set) => ({
     // Si no se encuentra en localStorage, llamar al backend
     set({ loading: true, error: null });
     try {
-      const res = await fetchWithAuth(`http://localhost:3000/api/producto/${id}`);
+      const res = await fetchWithAuth(`${API_BASE_URL}/api/producto/${id}`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || `Producto ${id} no encontrado`);
 
-      const API_URL = "http://localhost:3000/uploads/";
       const productoTransformado: ProductoTransformado = {
         id: String(data.id),
-        urlImage: `${API_URL}${data.imagen}`,
+        urlImage: buildImageUrl(data.imagen),
         altName: data.nombreProducto,
         productName: data.nombreProducto,
         originalPrice: `Q${Math.round(data.precioPublico * 1.3)}`,
@@ -106,7 +119,7 @@ export const useProductStore = create<ProductStore>((set) => ({
   addProducto: async (formData: FormData) => {
     set({ loading: true, error: null });
     try {
-      const response = await fetchWithAuth("http://localhost:3000/api/producto", {
+      const response = await fetchWithAuth(`${API_BASE_URL}/api/producto`, {
         method: "POST",
         body: formData,
       });
@@ -114,10 +127,9 @@ export const useProductStore = create<ProductStore>((set) => ({
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "Error al crear el producto");
 
-      const API_URL = "http://localhost:3000/uploads/";
       const productoTransformado: ProductoTransformado = {
         id: String(data.id),
-        urlImage: `${API_URL}${data.imagen}`,
+        urlImage: buildImageUrl(data.imagen),
         altName: data.nombreProducto,
         productName: data.nombreProducto,
         originalPrice: `Q${Math.round(data.precioPublico * 1.3)}`,
@@ -145,7 +157,7 @@ export const useProductStore = create<ProductStore>((set) => ({
   updateProducto: async (id: string, formData: FormData) => {
     set({ loading: true, error: null });
     try {
-      const response = await fetchWithAuth(`http://localhost:3000/api/producto/${id}`, {
+      const response = await fetchWithAuth(`${API_BASE_URL}/api/producto/${id}`, {
         method: "PUT",
         body: formData,
       });
@@ -153,10 +165,9 @@ export const useProductStore = create<ProductStore>((set) => ({
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "Error al actualizar el producto");
 
-      const API_URL = "http://localhost:3000/uploads/";
       const productoTransformado = {
         id: String(data.id),
-        urlImage: `${API_URL}${data.imagen}`,
+        urlImage: buildImageUrl(data.imagen),
         altName: data.nombreProducto,
         productName: data.nombreProducto,
         originalPrice: `Q${Math.round(data.precioPublico * 1.3)}`,
@@ -178,7 +189,7 @@ export const useProductStore = create<ProductStore>((set) => ({
   deleteProducto: async (id: string) => {
     set({ loading: true, error: null });
     try {
-      const response = await fetchWithAuth(`http://localhost:3000/api/producto/${id}`, {
+      const response = await fetchWithAuth(`${API_BASE_URL}/api/producto/${id}`, {
         method: "DELETE",
       });
 
