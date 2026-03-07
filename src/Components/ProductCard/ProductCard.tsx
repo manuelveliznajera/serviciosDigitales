@@ -14,6 +14,18 @@ const ProductCard: React.FC<Product> = ({
 }) => {
   const addProducto = useCartStore((state) => state.addProducto);
 
+  const normalizeImageUrl = (url: string) => {
+    if (!url) return "";
+    const marker = "https://res.cloudinary.com/";
+    const first = url.indexOf(marker);
+    if (first === -1) return url;
+
+    const second = url.indexOf(marker, first + marker.length);
+    if (second === -1) return url;
+
+    return url.slice(second);
+  };
+
   // Convierte "Q125" a número 125
   const parsePrice = (priceStr: string): number => {
     const num = Number(priceStr.replace("Q", "").trim());
@@ -36,7 +48,7 @@ const ProductCard: React.FC<Product> = ({
   return (
     <div className="bg-gray-100 shadow-md rounded-lg p-2 flex flex-col">
       <img
-        src={urlImage}
+        src={normalizeImageUrl(urlImage)}
         alt={altName}
         className="w-full h-70 rounded-lg p-1 bg-white"
       />
